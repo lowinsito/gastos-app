@@ -1,6 +1,13 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ETIQUETAS_CATEGORIA, formatearFecha, formatearMonto } from "@/lib/formato";
+import { crearGasto } from "@/lib/acciones";
+import {
+  ETIQUETAS_CATEGORIA,
+  formatearFecha,
+  formatearMonto,
+} from "@/lib/formato";
 import { FormularioGasto } from "@/components/formulario-gasto";
+import { BotonEliminar } from "@/components/boton-eliminar";
 
 // Esta funcion es un Server Component: corre en el servidor, nunca en el
 // navegador. Por eso puede hablar directo con la base de datos y usar la
@@ -26,7 +33,16 @@ export default async function Home() {
           </p>
         </header>
 
-        <FormularioGasto />
+        <section className="mb-8">
+          <h2 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Agregar un gasto
+          </h2>
+          <FormularioGasto
+            accion={crearGasto}
+            textoBoton="Agregar gasto"
+            limpiarAlGuardar
+          />
+        </section>
 
         {gastos.length === 0 ? (
           <p className="rounded-lg border border-dashed border-zinc-300 p-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
@@ -43,6 +59,9 @@ export default async function Home() {
                   <th className="px-4 py-3 text-right font-medium">Jose</th>
                   <th className="px-4 py-3 text-right font-medium">Camila</th>
                   <th className="px-4 py-3 text-right font-medium">Total</th>
+                  <th className="px-4 py-3 text-right font-medium">
+                    <span className="sr-only">Acciones</span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -80,6 +99,17 @@ export default async function Home() {
                       </td>
                       <td className="px-4 py-3 text-right font-medium tabular-nums whitespace-nowrap text-zinc-900 dark:text-zinc-100">
                         {formatearMonto(total)}
+                      </td>
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
+                        <span className="flex items-center justify-end gap-3">
+                          <Link
+                            href={`/gastos/${gasto.id}/editar`}
+                            className="text-xs text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+                          >
+                            Editar
+                          </Link>
+                          <BotonEliminar id={gasto.id} />
+                        </span>
                       </td>
                     </tr>
                   );

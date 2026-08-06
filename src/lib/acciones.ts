@@ -4,6 +4,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ETIQUETAS_CATEGORIA } from "@/lib/formato";
 import type { Categoria } from "@/generated/prisma/enums";
@@ -15,6 +16,16 @@ export type EstadoFormulario = {
 };
 
 const CATEGORIAS_VALIDAS = Object.keys(ETIQUETAS_CATEGORIA) as Categoria[];
+
+/** Los datos ya limpios, listos para guardar. */
+type DatosGasto = {
+  fecha: Date;
+  descripcion: string;
+  categoria: Categoria;
+  pusoJose: string;
+  pusoCamila: string;
+  observaciones: string | null;
+};
 
 /**
  * Convierte lo que llego del formulario en un monto valido.
@@ -31,10 +42,14 @@ function leerMonto(bruto: FormDataEntryValue | null): string | null {
   return texto;
 }
 
-export async function crearGasto(
-  _estadoPrevio: EstadoFormulario,
+/**
+ * Valida el formulario. Crear y editar usan exactamente las mismas reglas,
+ * asi que viven en un solo lugar: si manana agregamos una regla, vale para
+ * los dos caminos sin que nadie se olvide de copiarla.
+ */
+function validar(
   formData: FormData,
-): Promise<EstadoFormulario> {
+): { ok: true; datos: DatosGasto } | { ok: false; errores: Record<string, string> } {
   const errores: Record<string, string> = {};
 
   // --- Fecha ---------------------------------------------------------
@@ -63,8 +78,8 @@ export async function crearGasto(
   // --- Montos --------------------------------------------------------
   // El formulario tiene dos modos: uno solo pago, o pagaron los dos.
   const modo = String(formData.get("modo") ?? "simple");
-  let pusoJose: string | null;
-  let pusoCamila: string | null;
+  let pusoJose: string | null = null;
+  let pusoCamila: string | null = null;
 
   if (modo === "compartido") {
     pusoJose = leerMonto(formData.get("pusoJose"));
@@ -78,12 +93,8 @@ export async function crearGasto(
 
     if (monto === null) {
       errores.monto = "Monto inválido.";
-      pusoJose = null;
-      pusoCamila = null;
     } else if (pagador !== "JOSE" && pagador !== "CAMILA") {
       errores.pagador = "Elegí quién pagó.";
-      pusoJose = null;
-      pusoCamila = null;
     } else {
       pusoJose = pagador === "JOSE" ? monto : "0";
       pusoCamila = pagador === "CAMILA" ? monto : "0";
@@ -106,13 +117,13 @@ export async function crearGasto(
     errores.observaciones = "Máximo 500 caracteres.";
   }
 
-  // Si algo fallo, volvemos con los errores SIN tocar la base.
   if (Object.keys(errores).length > 0) {
-    return { errores };
+    return { ok: false, errores };
   }
 
-  await prisma.gasto.create({
-    data: {
+  return {
+    ok: true,
+    datos: {
       fecha,
       descripcion,
       categoria,
@@ -120,11 +131,45 @@ export async function crearGasto(
       pusoCamila: pusoCamila!,
       observaciones: observaciones === "" ? null : observaciones,
     },
-  });
+  };
+}
+
+export async function crearGasto(
+  _estadoPrevio: EstadoFormulario,
+  formData: FormData,
+): Promise<EstadoFormulario> {
+  const resultado = validar(formData);
+  if (!resultado.ok) return { errores: resultado.errores };
+
+  await prisma.gasto.create({ data: resultado.datos });
 
   // Le avisamos a Next.js que los datos de "/" cambiaron, para que vuelva
   // a generar la pagina y el gasto nuevo aparezca en la lista.
   revalidatePath("/");
 
   return { exito: true };
+}
+
+export async function actualizarGasto(
+  id: string,
+  _estadoPrevio: EstadoFormulario,
+  formData: FormData,
+): Promise<EstadoFormulario> {
+  const resultado = validar(formData);
+  if (!resultado.ok) return { errores: resultado.errores };
+
+  await prisma.gasto.update({
+    where: { id },
+    data: resultado.datos,
+  });
+
+  revalidatePath("/");
+
+  // redirect() corta la ejecucion aca y manda al usuario a la lista.
+  redirect("/");
+}
+
+export async function eliminarGasto(id: string) {
+  await prisma.gasto.delete({ where: { id } });
+  revalidatePath("/");
 }
