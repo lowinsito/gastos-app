@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 import { mesesConGastos, resolverFiltros } from "@/lib/consultas";
 import {
   ETIQUETAS_CATEGORIA,
@@ -55,10 +55,10 @@ export default async function ResumenPage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold tracking-tight text-texto">
           Resumen
         </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-sm text-texto-suave">
           {totales._count} {totales._count === 1 ? "gasto" : "gastos"} en{" "}
           {periodo}
         </p>
@@ -67,7 +67,7 @@ export default async function ResumenPage({
       <Filtros ruta="/resumen" meses={meses} mes={mes} />
 
       {totales._count === 0 ? (
-        <p className="rounded-lg border border-dashed border-zinc-300 p-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+        <p className="rounded-2xl border border-dashed border-borde p-10 text-center text-sm text-texto-suave">
           No hay gastos en este período.
         </p>
       ) : (
@@ -80,8 +80,8 @@ export default async function ResumenPage({
 
           <Balance balanceJose={balanceJose} leTocaba={leTocabaACadaUno} />
 
-          <section className="mt-6 rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-            <h2 className="mb-4 text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          <section className="mt-6 rounded-2xl border border-borde bg-superficie p-5">
+            <h2 className="mb-4 text-xs font-medium uppercase tracking-wide text-texto-suave">
               Gasto por categoría
             </h2>
 
@@ -96,19 +96,19 @@ export default async function ResumenPage({
                 return (
                   <li key={fila.categoria}>
                     <div className="mb-1 flex items-baseline justify-between gap-4 text-sm">
-                      <span className="text-zinc-700 dark:text-zinc-300">
+                      <span className="text-texto">
                         {ETIQUETAS_CATEGORIA[fila.categoria]}
                       </span>
-                      <span className="tabular-nums whitespace-nowrap text-zinc-900 dark:text-zinc-100">
+                      <span className="tabular-nums whitespace-nowrap text-texto">
                         {formatearCentavos(fila.centavos)}
-                        <span className="ml-2 text-xs text-zinc-400">
+                        <span className="ml-2 text-xs text-texto-suave">
                           {porcentajeDelTotal.toFixed(0)}%
                         </span>
                       </span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                    <div className="h-2 overflow-hidden rounded-full bg-acento-suave">
                       <div
-                        className="h-full rounded-full bg-zinc-900 dark:bg-zinc-300"
+                        className="h-full rounded-full bg-acento"
                         style={{ width: `${anchoBarra}%` }}
                       />
                     </div>
@@ -135,12 +135,12 @@ function Tarjeta({
   destacada?: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+    <div className="rounded-2xl border border-borde bg-superficie p-5">
+      <p className="text-xs font-medium uppercase tracking-wide text-texto-suave">
         {titulo}
       </p>
       <p
-        className={`mt-2 tabular-nums font-semibold text-zinc-900 dark:text-zinc-50 ${
+        className={`mt-2 tabular-nums font-semibold text-texto ${
           destacada ? "text-2xl" : "text-xl"
         }`}
       >
@@ -164,17 +164,17 @@ function Balance({
   const acreedor = balanceJose > 0 ? "Jose" : "Camila";
 
   return (
-    <section className="mt-4 rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+    <section className="mt-4 rounded-2xl border border-borde bg-superficie p-5">
+      <p className="text-xs font-medium uppercase tracking-wide text-texto-suave">
         Balance
       </p>
 
       {estanAMano ? (
-        <p className="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-          Están a mano 🤝
+        <p className="mt-2 text-xl font-semibold text-texto">
+          Están a mano 🤝
         </p>
       ) : (
-        <p className="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <p className="mt-2 text-xl font-semibold text-texto">
           {deudor} le debe a {acreedor}{" "}
           <span className="tabular-nums">
             {formatearCentavos(Math.abs(balanceJose))}
@@ -182,7 +182,7 @@ function Balance({
         </p>
       )}
 
-      <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="mt-2 text-xs text-texto-suave">
         Dividido en partes iguales, a cada uno le tocaba{" "}
         {formatearCentavos(leTocaba)}.
       </p>

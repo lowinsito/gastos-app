@@ -50,7 +50,8 @@ export function FormularioGasto({
   // Si el gasto que estamos editando tiene plata de los dos, arrancamos
   // directamente en modo compartido.
   const [compartido, setCompartido] = useState(
-    () => Number(valores?.pusoJose ?? 0) > 0 && Number(valores?.pusoCamila ?? 0) > 0,
+    () =>
+      Number(valores?.pusoJose ?? 0) > 0 && Number(valores?.pusoCamila ?? 0) > 0,
   );
   const formularioRef = useRef<HTMLFormElement>(null);
 
@@ -79,7 +80,7 @@ export function FormularioGasto({
     <form
       ref={formularioRef}
       action={enviar}
-      className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
+      className="rounded-2xl border border-borde bg-superficie p-5"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo etiqueta="Fecha" error={estado.errores?.fecha}>
@@ -130,7 +131,7 @@ export function FormularioGasto({
         value={compartido ? "compartido" : "simple"}
       />
 
-      <div className="mt-4 rounded-md bg-zinc-50 p-4 dark:bg-zinc-950/50">
+      <div className="mt-4 rounded-xl bg-acento-suave/60 p-4">
         {compartido ? (
           <div className="grid gap-4 sm:grid-cols-2">
             <Campo etiqueta="Puso Jose" error={estado.errores?.pusoJose}>
@@ -188,12 +189,12 @@ export function FormularioGasto({
           </div>
         )}
 
-        <label className="mt-4 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <label className="mt-4 flex items-center gap-2 text-sm text-texto-suave">
           <input
             type="checkbox"
             checked={compartido}
             onChange={(evento) => setCompartido(evento.target.checked)}
-            className="size-4 rounded border-zinc-300 dark:border-zinc-700"
+            className="size-4 rounded accent-[var(--acento)]"
           />
           Lo pagamos entre los dos
         </label>
@@ -218,15 +219,13 @@ export function FormularioGasto({
         <button
           type="submit"
           disabled={enviando}
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="rounded-full bg-acento px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {enviando ? "Guardando…" : textoBoton}
         </button>
 
         {estado.exito && limpiarAlGuardar && (
-          <span className="text-sm text-green-600 dark:text-green-500">
-            Gasto guardado ✓
-          </span>
+          <span className="text-sm text-acento">Gasto guardado ✓</span>
         )}
       </div>
     </form>
@@ -236,7 +235,7 @@ export function FormularioGasto({
 // --- Piezas chicas reutilizables -------------------------------------
 
 const CLASES_INPUT =
-  "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100";
+  "w-full rounded-xl border border-borde bg-superficie px-3 py-2 text-sm text-texto outline-none focus:border-acento";
 
 function Campo({
   etiqueta,
@@ -249,7 +248,7 @@ function Campo({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-zinc-600 dark:text-zinc-400">
+      <span className="mb-1 block text-xs font-medium text-texto-suave">
         {etiqueta}
       </span>
       {children}
@@ -274,13 +273,13 @@ function Radio({
   porDefecto?: boolean;
 }) {
   return (
-    <label className="flex items-center gap-1.5 text-sm text-zinc-700 dark:text-zinc-300">
+    <label className="flex items-center gap-1.5 text-sm text-texto">
       <input
         type="radio"
         name={nombre}
         value={valor}
         defaultChecked={porDefecto}
-        className="size-4"
+        className="size-4 accent-[var(--acento)]"
       />
       {etiqueta}
     </label>

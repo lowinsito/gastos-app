@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
+/* Paleta de la app: grises calidos (con algo de marron) en lugar de grises
+   azulados, y un terracota como color de acento. La idea es que se sienta
+   una app de casa y no una herramienta de oficina. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --fondo: #faf7f2;
+  --superficie: #ffffff;
+  --borde: #ebe4da;
+  --texto: #2b2521;
+  --texto-suave: #7d7168;
+  --acento: #c2632f;
+  --acento-suave: #f6ece3;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --fondo: #16130f;
+    --superficie: #1e1a16;
+    --borde: #2f2822;
+    --texto: #f2ece5;
+    --texto-suave: #a2958a;
+    --acento: #e08a4e;
+    --acento-suave: #2a2018;
   }
 }
 
+/* @theme le enseña estos colores a Tailwind, para poder escribir clases
+   como bg-superficie o text-acento igual que las que ya trae. */
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-borde: var(--borde);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-acento: var(--acento);
+  --color-acento-suave: var(--acento-suave);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }

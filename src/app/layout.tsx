@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       {/* Todo lo que va aca se dibuja en TODAS las paginas. La navegacion
           se escribe una sola vez; {children} es el hueco donde Next.js mete
           la pagina que corresponda a la direccion actual. */}
-      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-zinc-950">
+      <body className="flex min-h-full flex-col bg-fondo">
         <Navegacion />
         <main className="flex-1">{children}</main>
       </body>

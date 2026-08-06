@@ -23,10 +23,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     <div>
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-2xl font-semibold tracking-tight text-texto">
             Gastos de la casa
           </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-texto-suave">
             {gastos.length}{" "}
             {gastos.length === 1 ? "gasto" : "gastos"}
             {hayFiltros ? " con estos filtros" : " en total"}
@@ -34,7 +34,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </header>
 
         <section className="mb-8">
-          <h2 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+          <h2 className="mb-3 text-sm font-semibold text-texto">
             Agregar un gasto
           </h2>
           <FormularioGasto
@@ -47,10 +47,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         <Filtros ruta="/" meses={meses} mes={mes} categoria={categoria} />
 
         {gastos.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-zinc-300 p-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+          <p className="rounded-2xl border border-dashed border-borde p-10 text-center text-sm text-texto-suave">
             {hayFiltros
               ? "No hay gastos que coincidan con esos filtros."
-              : "Todavia no hay gastos cargados."}
+              : "Todavía no hay gastos cargados. Agregá el primero acá arriba 👆"}
           </p>
         ) : (
           <ListaGastos gastos={gastos} />

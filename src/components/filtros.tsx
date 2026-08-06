@@ -38,7 +38,7 @@ export function Filtros({ ruta, meses, mes, categoria }: Props) {
   return (
     <div className="mb-4 flex flex-wrap items-end gap-3">
       <label className="block">
-        <span className="mb-1 block text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <span className="mb-1 block text-xs font-medium text-texto-suave">
           Mes
         </span>
         <select
@@ -59,7 +59,7 @@ export function Filtros({ ruta, meses, mes, categoria }: Props) {
 
       {conCategoria && (
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <span className="mb-1 block text-xs font-medium text-texto-suave">
             Categoría
           </span>
           <select
@@ -81,7 +81,7 @@ export function Filtros({ ruta, meses, mes, categoria }: Props) {
         <button
           type="button"
           onClick={() => navegarCon("", "")}
-          className="pb-2 text-xs text-zinc-500 underline underline-offset-2 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="pb-2 text-xs text-acento underline underline-offset-2"
         >
           Limpiar filtros
         </button>
@@ -91,4 +91,4 @@ export function Filtros({ ruta, meses, mes, categoria }: Props) {
 }
 
 const CLASES_SELECT =
-  "rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100";
+  "rounded-xl border border-borde bg-superficie px-3 py-2 text-sm text-texto outline-none focus:border-acento";

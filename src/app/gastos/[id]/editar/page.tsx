@@ -43,11 +43,11 @@ export default async function EditarGastoPage({
         <header className="mb-6">
           <Link
             href="/"
-            className="text-sm text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="text-sm text-texto-suave transition-colors hover:text-acento"
           >
             ← Volver a la lista
           </Link>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-texto">
             Editar gasto
           </h1>
         </header>

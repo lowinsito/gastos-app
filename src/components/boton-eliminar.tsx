@@ -22,7 +22,7 @@ export function BotonEliminar({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => setConfirmando(true)}
-        className="text-xs text-zinc-400 transition-colors hover:text-red-600 dark:hover:text-red-400"
+        className="text-xs text-texto-suave transition-colors hover:text-red-600 dark:hover:text-red-400"
       >
         Eliminar
       </button>
@@ -30,7 +30,7 @@ export function BotonEliminar({ id }: { id: string }) {
   }
 
   return (
-    <span className="flex items-center justify-end gap-2 whitespace-nowrap">
+    <span className="flex items-center justify-end gap-3 whitespace-nowrap">
       <button
         type="button"
         disabled={borrando}
@@ -43,7 +43,7 @@ export function BotonEliminar({ id }: { id: string }) {
         type="button"
         disabled={borrando}
         onClick={() => setConfirmando(false)}
-        className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+        className="text-xs text-texto-suave transition-colors hover:text-texto"
       >
         Cancelar
       </button>
