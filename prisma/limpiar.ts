@@ -25,6 +25,14 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
 });
 
-const { count } = await prisma.gasto.deleteMany();
-console.log(`Gastos borrados: ${count}`);
-await prisma.$disconnect();
+async function main() {
+  const { count } = await prisma.gasto.deleteMany();
+  console.log(`Gastos borrados: ${count}`);
+}
+
+main()
+  .catch((error) => {
+    console.error("Fallo el borrado:", error);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());
