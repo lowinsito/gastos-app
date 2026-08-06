@@ -32,6 +32,48 @@ export function formatearFecha(fecha: Date): string {
   return formateadorFecha.format(fecha);
 }
 
+const formateadorMes = new Intl.DateTimeFormat("es-AR", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+/** Date -> "2026-08". Es la forma en que identificamos un mes en la URL. */
+export function mesDeFecha(fecha: Date): string {
+  return fecha.toISOString().slice(0, 7);
+}
+
+/** "2026-08" -> "agosto de 2026" */
+export function formatearMes(mes: string): string {
+  const rango = rangoDelMes(mes);
+  if (!rango) return mes;
+  return formateadorMes.format(rango.desde);
+}
+
+/**
+ * "2026-08" -> el intervalo [1 de agosto, 1 de septiembre).
+ *
+ * Devolvemos el principio del mes SIGUIENTE en lugar del 31 a las 23:59:
+ * asi la consulta es "mayor o igual que el 1 y menor que el 1 del que
+ * viene", que no tiene bordes raros ni depende de cuantos dias tiene el mes.
+ *
+ * Si el texto no es un mes valido devuelve null, porque llega de la URL y
+ * cualquiera puede escribir lo que quiera ahi.
+ */
+export function rangoDelMes(mes: string): { desde: Date; hasta: Date } | null {
+  const partes = /^(\d{4})-(\d{2})$/.exec(mes);
+  if (!partes) return null;
+
+  const anio = Number(partes[1]);
+  const numeroDeMes = Number(partes[2]);
+  if (numeroDeMes < 1 || numeroDeMes > 12) return null;
+
+  return {
+    desde: new Date(Date.UTC(anio, numeroDeMes - 1, 1)),
+    hasta: new Date(Date.UTC(anio, numeroDeMes, 1)),
+  };
+}
+
 /**
  * Como se muestra cada categoria en pantalla.
  * En la base viven en MAYUSCULAS porque son constantes; al usuario le

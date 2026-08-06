@@ -1,24 +1,66 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
+import type { Categoria } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { crearGasto } from "@/lib/acciones";
 import {
   ETIQUETAS_CATEGORIA,
   formatearFecha,
+  formatearMes,
   formatearMonto,
+  mesDeFecha,
+  rangoDelMes,
 } from "@/lib/formato";
 import { FormularioGasto } from "@/components/formulario-gasto";
 import { BotonEliminar } from "@/components/boton-eliminar";
+import { Filtros } from "@/components/filtros";
+
+/** Lo que llega en la URL es texto libre: puede venir vacio, repetido o inventado. */
+function leerParametro(valor: string | string[] | undefined): string {
+  if (Array.isArray(valor)) return valor[0] ?? "";
+  return valor ?? "";
+}
 
 // Esta funcion es un Server Component: corre en el servidor, nunca en el
 // navegador. Por eso puede hablar directo con la base de datos y usar la
 // contrasena del .env sin que lleguen al usuario.
-//
-// El `async` permite usar `await` adentro: esperar a que la base responda
-// antes de dibujar la pagina.
-export default async function Home() {
-  const gastos = await prisma.gasto.findMany({
-    orderBy: { fecha: "desc" },
-  });
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const parametros = await searchParams;
+  const mesPedido = leerParametro(parametros.mes);
+  const categoriaPedida = leerParametro(parametros.categoria);
+
+  // Validamos los filtros antes de usarlos. Si alguien escribe
+  // ?mes=cualquier-cosa en la barra de direcciones, lo ignoramos.
+  const rango = rangoDelMes(mesPedido);
+  const mes = rango ? mesPedido : "";
+
+  const categoriaValida = categoriaPedida in ETIQUETAS_CATEGORIA;
+  const categoria = categoriaValida ? categoriaPedida : "";
+
+  // Armamos la condicion de busqueda. Filtramos en la BASE, no en el
+  // navegador: con 5.000 gastos, traerlos todos para descartar el 90%
+  // seria un desperdicio de memoria y de tiempo.
+  const donde: Prisma.GastoWhereInput = {};
+  if (rango) donde.fecha = { gte: rango.desde, lt: rango.hasta };
+  if (categoria) donde.categoria = categoria as Categoria;
+
+  // Las dos consultas son independientes, asi que las lanzamos juntas en
+  // lugar de esperar una y despues la otra.
+  const [gastos, fechas] = await Promise.all([
+    prisma.gasto.findMany({ where: donde, orderBy: { fecha: "desc" } }),
+    prisma.gasto.findMany({
+      select: { fecha: true },
+      orderBy: { fecha: "desc" },
+    }),
+  ]);
+
+  // Los meses que ofrecemos en el filtro salen de los datos: no tiene
+  // sentido listar meses en los que no gastaron nada.
+  const meses = [...new Set(fechas.map((g) => mesDeFecha(g.fecha)))].map(
+    (valor) => ({ valor, etiqueta: formatearMes(valor) }),
+  );
+
+  const hayFiltros = mes !== "" || categoria !== "";
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -29,7 +71,8 @@ export default async function Home() {
           </h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             {gastos.length}{" "}
-            {gastos.length === 1 ? "gasto registrado" : "gastos registrados"}
+            {gastos.length === 1 ? "gasto" : "gastos"}
+            {hayFiltros ? " con estos filtros" : " en total"}
           </p>
         </header>
 
@@ -44,9 +87,13 @@ export default async function Home() {
           />
         </section>
 
+        <Filtros meses={meses} mes={mes} categoria={categoria} />
+
         {gastos.length === 0 ? (
           <p className="rounded-lg border border-dashed border-zinc-300 p-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-            Todavia no hay gastos cargados.
+            {hayFiltros
+              ? "No hay gastos que coincidan con esos filtros."
+              : "Todavia no hay gastos cargados."}
           </p>
         ) : (
           <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
