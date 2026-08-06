@@ -15,6 +15,26 @@ export function formatearMonto(valor: number | string): string {
   return formateadorMoneda.format(Number(valor));
 }
 
+/**
+ * Convierte un Decimal de Prisma a centavos enteros.
+ *
+ * Para sumar plata trabajamos con NUMEROS ENTEROS de centavos, no con
+ * decimales. Los decimales en binario no son exactos (0.1 + 0.2 da
+ * 0.30000000000000004) y al sumar cientos de gastos ese error se acumula.
+ * Con enteros no hay error posible: 875050 centavos es 875050, y punto.
+ */
+export function aCentavos(
+  valor: { toFixed(digitos: number): string } | null | undefined,
+): number {
+  if (valor == null) return 0;
+  return Math.round(Number(valor.toFixed(2)) * 100);
+}
+
+/** 875050 -> "$ 8.750,50" */
+export function formatearCentavos(centavos: number): string {
+  return formatearMonto(centavos / 100);
+}
+
 // OJO con timeZone: "UTC".
 // La columna `fecha` guarda solo el dia, sin hora, asi que Prisma nos
 // devuelve la medianoche en UTC. Si formatearamos en la zona horaria de

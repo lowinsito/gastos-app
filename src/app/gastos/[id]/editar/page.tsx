@@ -38,7 +38,7 @@ export default async function EditarGastoPage({
   const guardar = actualizarGasto.bind(null, gasto.id);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <div>
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-6">
           <Link

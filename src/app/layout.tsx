@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Navegacion } from "@/components/navegacion";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es-AR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      {/* Todo lo que va aca se dibuja en TODAS las paginas. La navegacion
+          se escribe una sola vez; {children} es el hueco donde Next.js mete
+          la pagina que corresponda a la direccion actual. */}
+      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-zinc-950">
+        <Navegacion />
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
