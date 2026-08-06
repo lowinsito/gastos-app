@@ -1,0 +1,48 @@
+// Esquema de la base de datos de la app de gastos compartidos.
+// Cada vez que se modifica este archivo hay que crear una migracion:
+//   npx prisma migrate dev --name descripcion-del-cambio
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Categorias posibles de un gasto.
+enum Categoria {
+  SUPERMERCADO
+  SERVICIOS
+  COMIDA_AFUERA
+  SALUD
+  OCIO
+  MASCOTAS
+  HOGAR
+  OTROS
+}
+
+/// Un gasto del hogar. Siempre se reparte 50/50 entre Jose y Camila,
+/// pero la plata puede haber salido de un solo bolsillo o de los dos.
+model Gasto {
+  id String @id @default(cuid())
+
+  fecha       DateTime  @db.Date
+  descripcion String
+  categoria   Categoria
+
+  /// Cuanto puso cada uno. El monto total es la suma de ambos.
+  pusoJose   Decimal @default(0) @db.Decimal(12, 2)
+  pusoCamila Decimal @default(0) @db.Decimal(12, 2)
+
+  observaciones String?
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  // Indices para las consultas que la app hace seguido:
+  // filtrar por mes y filtrar por categoria.
+  @@index([fecha])
+  @@index([categoria])
+}

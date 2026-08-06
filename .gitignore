@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma: el cliente se genera desde el esquema, no se versiona
+/src/generated
