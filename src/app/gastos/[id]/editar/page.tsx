@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { exigirSesion } from "@/lib/autenticacion";
 import { actualizarGasto } from "@/lib/acciones";
 import { FormularioGasto } from "@/components/formulario-gasto";
 
@@ -10,6 +11,8 @@ import { FormularioGasto } from "@/components/formulario-gasto";
 export default async function EditarGastoPage({
   params,
 }: PageProps<"/gastos/[id]/editar">) {
+  await exigirSesion();
+
   const { id } = await params;
 
   const gasto = await prisma.gasto.findUnique({ where: { id } });

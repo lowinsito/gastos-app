@@ -1,4 +1,5 @@
 ﻿import { prisma } from "@/lib/prisma";
+import { exigirSesion } from "@/lib/autenticacion";
 import { mesesConGastos, resolverFiltros } from "@/lib/consultas";
 import {
   ETIQUETAS_CATEGORIA,
@@ -11,6 +12,8 @@ import { Filtros } from "@/components/filtros";
 export default async function ResumenPage({
   searchParams,
 }: PageProps<"/resumen">) {
+  await exigirSesion();
+
   const parametros = await searchParams;
   const { mes, donde } = resolverFiltros(parametros);
 

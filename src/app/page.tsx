@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { exigirSesion } from "@/lib/autenticacion";
 import { crearGasto } from "@/lib/acciones";
 import { mesesConGastos, resolverFiltros } from "@/lib/consultas";
 import { FormularioGasto } from "@/components/formulario-gasto";
@@ -9,6 +10,10 @@ import { ListaGastos } from "@/components/lista-gastos";
 // navegador. Por eso puede hablar directo con la base de datos y usar la
 // contrasena del .env sin que lleguen al usuario.
 export default async function Home({ searchParams }: PageProps<"/">) {
+  // Segunda barrera, despues del proxy: si no hay sesion, ni siquiera
+  // llegamos a consultar la base.
+  await exigirSesion();
+
   const parametros = await searchParams;
   const { mes, categoria, donde, hayFiltros } = resolverFiltros(parametros);
 

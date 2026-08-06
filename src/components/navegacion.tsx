@@ -1,51 +1,30 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const SECCIONES = [
-  { href: "/resumen", texto: "Resumen" },
-  { href: "/", texto: "Gastos" },
-];
+import { obtenerSesion } from "@/lib/sesion";
+import { NOMBRES } from "@/lib/autenticacion";
+import { EnlacesNavegacion } from "@/components/enlaces-navegacion";
+import { BotonSalir } from "@/components/boton-salir";
 
 /**
- * Necesita ser Client Component por una sola razon: usePathname, que nos
- * dice en que pagina estamos para resaltar el enlace correspondiente.
- * Sin eso, seria un Server Component.
+ * Server Component: lee la sesion en el servidor. Solo la parte que
+ * necesita saber en que pagina estamos (para resaltar el enlace activo)
+ * viaja al navegador, en un componente aparte.
  */
-export function Navegacion() {
-  const rutaActual = usePathname();
+export async function Navegacion() {
+  const sesion = await obtenerSesion();
+
+  // Sin sesion no hay nada que navegar: estas en el login.
+  if (!sesion) return null;
 
   return (
     <nav className="border-b border-borde bg-superficie">
       <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 py-3 pr-3">
-          <Logo />
-          <span className="text-sm font-semibold text-texto">Nuestra casa</span>
-        </Link>
+        <Logo />
+        <EnlacesNavegacion />
 
-        <div className="flex items-center gap-1">
-          {SECCIONES.map((seccion) => {
-            const activa = rutaActual === seccion.href;
-
-            return (
-              <Link
-                key={seccion.href}
-                href={seccion.href}
-                // aria-current le avisa a los lectores de pantalla cual es la
-                // pagina actual. El color solo no alcanza: alguien que no ve
-                // la pantalla necesita esa informacion igual.
-                aria-current={activa ? "page" : undefined}
-                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                  activa
-                    ? "bg-acento-suave text-acento"
-                    : "text-texto-suave hover:text-texto"
-                }`}
-              >
-                {seccion.texto}
-              </Link>
-            );
-          })}
+        <div className="ml-auto flex items-center gap-3">
+          <span className="hidden text-sm text-texto-suave sm:inline">
+            {NOMBRES[sesion.persona]}
+          </span>
+          <BotonSalir />
         </div>
       </div>
     </nav>
@@ -59,13 +38,7 @@ export function Navegacion() {
  */
 function Logo() {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      className="size-7 shrink-0"
-      // aria-hidden porque el texto de al lado ya dice "Nuestra casa": un
-      // lector de pantalla que lea las dos cosas seria repetitivo.
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 32 32" className="mr-1 size-7 shrink-0" aria-hidden="true">
       <rect width="32" height="32" rx="8" className="fill-acento" />
       <path
         d="M16 7 L26 15 L23.5 15 L23.5 25 L8.5 25 L8.5 15 L6 15 Z"

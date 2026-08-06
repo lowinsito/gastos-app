@@ -11,6 +11,28 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Las dos personas de la casa.
+enum Persona {
+  JOSE
+  CAMILA
+}
+
+/// Quien puede entrar a la app.
+///
+/// No hay pantalla de registro: son siempre los mismos dos y los creamos
+/// nosotros con `npm run usuarios`.
+model Usuario {
+  id      String  @id @default(cuid())
+  persona Persona @unique
+
+  /// El hash de la contrasena, NUNCA la contrasena.
+  /// Si alguien roba la base, no puede deducir las claves de aca.
+  hashClave String
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+}
+
 /// Categorias posibles de un gasto.
 enum Categoria {
   SUPERMERCADO

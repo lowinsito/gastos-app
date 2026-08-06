@@ -6,6 +6,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { exigirSesion } from "@/lib/autenticacion";
 import { ETIQUETAS_CATEGORIA } from "@/lib/formato";
 import type { Categoria } from "@/generated/prisma/enums";
 
@@ -134,10 +135,15 @@ function validar(
   };
 }
 
+// Las Server Actions se pueden invocar con un pedido POST directo, sin
+// pasar por ninguna pantalla de la app. Por eso CADA UNA verifica la
+// sesion por su cuenta: que el proxy y las paginas ya lo hagan no alcanza.
 export async function crearGasto(
   _estadoPrevio: EstadoFormulario,
   formData: FormData,
 ): Promise<EstadoFormulario> {
+  await exigirSesion();
+
   const resultado = validar(formData);
   if (!resultado.ok) return { errores: resultado.errores };
 
@@ -155,6 +161,8 @@ export async function actualizarGasto(
   _estadoPrevio: EstadoFormulario,
   formData: FormData,
 ): Promise<EstadoFormulario> {
+  await exigirSesion();
+
   const resultado = validar(formData);
   if (!resultado.ok) return { errores: resultado.errores };
 
@@ -170,6 +178,8 @@ export async function actualizarGasto(
 }
 
 export async function eliminarGasto(id: string) {
+  await exigirSesion();
+
   await prisma.gasto.delete({ where: { id } });
   revalidatePath("/");
 }
