@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ETIQUETAS_CATEGORIA, formatearFecha, formatearMonto } from "@/lib/formato";
+import { FormularioGasto } from "@/components/formulario-gasto";
 
 // Esta funcion es un Server Component: corre en el servidor, nunca en el
 // navegador. Por eso puede hablar directo con la base de datos y usar la
@@ -24,6 +25,8 @@ export default async function Home() {
             {gastos.length === 1 ? "gasto registrado" : "gastos registrados"}
           </p>
         </header>
+
+        <FormularioGasto />
 
         {gastos.length === 0 ? (
           <p className="rounded-lg border border-dashed border-zinc-300 p-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
