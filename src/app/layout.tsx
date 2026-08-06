@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gastos de la casa",
+  title: "Gastos",
   description: "Gastos compartidos de Jose y Camila",
 };
 

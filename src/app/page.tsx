@@ -12,7 +12,7 @@ import { ListaGastos } from "@/components/lista-gastos";
 export default async function Home({ searchParams }: PageProps<"/">) {
   // Segunda barrera, despues del proxy: si no hay sesion, ni siquiera
   // llegamos a consultar la base.
-  await exigirSesion();
+  const sesion = await exigirSesion();
 
   const parametros = await searchParams;
   const { mes, categoria, donde, hayFiltros } = resolverFiltros(parametros);
@@ -29,13 +29,20 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-8">
           <h1 className="text-2xl font-semibold tracking-tight text-texto">
-            Gastos de la casa
+            Gastos
           </h1>
           <p className="mt-1 text-sm text-texto-suave">
             {gastos.length}{" "}
             {gastos.length === 1 ? "gasto" : "gastos"}
             {hayFiltros ? " con estos filtros" : " en total"}
           </p>
+
+          {/* Saludo privado: solo lo ve quien inicio sesion como Camila. */}
+          {sesion.persona === "CAMILA" && (
+            <p className="mt-4 rounded-2xl border border-borde bg-acento-suave px-4 py-3 text-sm text-acento">
+              Tranqui gordi, cambiá ese mal humor 💛
+            </p>
+          )}
         </header>
 
         <section className="mb-8">

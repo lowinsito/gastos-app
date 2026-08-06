@@ -10,7 +10,7 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Gastos de la casa",
+    name: "Gastos",
     // El corto es el que entra debajo del icono en la pantalla de inicio.
     short_name: "Gastos",
     description: "Gastos compartidos de la casa",

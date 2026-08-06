@@ -115,7 +115,7 @@ export function FormularioGasto({
               type="text"
               name="descripcion"
               defaultValue={valores?.descripcion ?? ""}
-              placeholder="Supermercado Coto"
+              placeholder="En qué gastaron"
               maxLength={200}
               className={CLASES_INPUT}
             />

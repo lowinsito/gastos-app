@@ -3,7 +3,7 @@ import { obtenerSesion } from "@/lib/sesion";
 import { FormularioLogin } from "@/components/formulario-login";
 
 export const metadata = {
-  title: "Entrar · Gastos de la casa",
+  title: "Entrar · Gastos",
 };
 
 export default async function LoginPage() {
@@ -19,7 +19,7 @@ export default async function LoginPage() {
         <div className="mb-6 text-center">
           <Logo />
           <h1 className="mt-3 text-xl font-semibold tracking-tight text-texto">
-            Gastos de la casa
+            Gastos
           </h1>
           <p className="mt-1 text-sm text-texto-suave">
             Entrá para ver y cargar los gastos.
