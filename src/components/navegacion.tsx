@@ -2,6 +2,7 @@ import { obtenerSesion } from "@/lib/sesion";
 import { NOMBRES } from "@/lib/autenticacion";
 import { EnlacesNavegacion } from "@/components/enlaces-navegacion";
 import { BotonSalir } from "@/components/boton-salir";
+import { SelectorTema } from "@/components/selector-tema";
 
 /**
  * Server Component: lee la sesion en el servidor. Solo la parte que
@@ -20,7 +21,8 @@ export async function Navegacion() {
         <Logo />
         <EnlacesNavegacion />
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2">
+          <SelectorTema />
           <span className="hidden text-sm text-texto-suave sm:inline">
             {NOMBRES[sesion.persona]}
           </span>

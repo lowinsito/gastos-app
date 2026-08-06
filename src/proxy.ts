@@ -32,7 +32,12 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // No corras en los archivos internos de Next.js ni en los iconos:
-  // no tiene sentido pedir sesion para servir una hoja de estilos.
-  matcher: ["/((?!_next/static|_next/image|icon.svg|favicon.ico).*)"],
+  // No corras en los archivos internos de Next.js, ni en los iconos, ni en
+  // el manifiesto: no tiene sentido pedir sesion para servir una hoja de
+  // estilos. Ademas, el manifiesto tiene que poder leerse para que el
+  // celular sepa como instalar la app, y ahi devolver el HTML del login
+  // rompia la instalacion.
+  matcher: [
+    "/((?!_next/static|_next/image|icon.svg|favicon.ico|manifest.webmanifest).*)",
+  ],
 };

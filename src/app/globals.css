@@ -2,7 +2,14 @@
 
 /* Paleta de la app: grises calidos (con algo de marron) en lugar de grises
    azulados, y un terracota como color de acento. La idea es que se sienta
-   una app de casa y no una herramienta de oficina. */
+   una app de casa y no una herramienta de oficina.
+
+   El tema se elige de tres formas y este archivo las contempla en orden:
+
+   1. data-theme="oscuro" / "claro"  -> lo eligio la persona a mano
+   2. sin data-theme                  -> sigue la preferencia del sistema
+*/
+
 :root {
   --fondo: #faf7f2;
   --superficie: #ffffff;
@@ -13,8 +20,9 @@
   --acento-suave: #f6ece3;
 }
 
+/* Modo oscuro del sistema, salvo que la persona haya pedido claro. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="claro"]) {
     --fondo: #16130f;
     --superficie: #1e1a16;
     --borde: #2f2822;
@@ -23,6 +31,18 @@
     --acento: #e08a4e;
     --acento-suave: #2a2018;
   }
+}
+
+/* Modo oscuro elegido a mano: gana siempre, incluso si el sistema esta en
+   claro. Va despues del bloque de arriba para tener mas prioridad. */
+:root[data-theme="oscuro"] {
+  --fondo: #16130f;
+  --superficie: #1e1a16;
+  --borde: #2f2822;
+  --texto: #f2ece5;
+  --texto-suave: #a2958a;
+  --acento: #e08a4e;
+  --acento-suave: #2a2018;
 }
 
 /* @theme le enseña estos colores a Tailwind, para poder escribir clases
@@ -43,4 +63,13 @@ body {
   background: var(--fondo);
   color: var(--texto);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Que los controles nativos (calendarios, flechitas de los select)
+   acompanen el tema en lugar de aparecer siempre en blanco. */
+:root[data-theme="oscuro"] {
+  color-scheme: dark;
+}
+:root[data-theme="claro"] {
+  color-scheme: light;
 }
