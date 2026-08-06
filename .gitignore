@@ -42,3 +42,9 @@ next-env.d.ts
 
 # prisma: el cliente se genera desde el esquema, no se versiona
 /src/generated
+
+# guias de Prisma para asistentes de IA: se reinstalan con `prisma init`
+/.agents/
+/.windsurf/
+/.claude/skills/
+/skills-lock.json
