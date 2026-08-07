@@ -10,6 +10,7 @@
     "seed": "tsx prisma/seed.ts",
     "limpiar": "tsx prisma/limpiar.ts",
     "importar": "tsx prisma/importar-excel.ts",
+    "importar-lista": "tsx prisma/importar-lista.ts",
     "usuarios": "tsx prisma/usuarios.ts",
     "postinstall": "prisma generate"
   },
