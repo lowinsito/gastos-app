@@ -14,7 +14,13 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-sm items-center px-4">
+    // data-pagina no hace nada visual: es una marca para que globals.css
+    // pueda reconocer esta pantalla y darle su propio fondo y su propio
+    // velo, sin que la pagina tenga que saber nada de imagenes.
+    <div
+      data-pagina="login"
+      className="mx-auto flex min-h-[70vh] max-w-sm items-center px-4"
+    >
       <div className="w-full">
         <div className="mb-6 text-center">
           <Logo />

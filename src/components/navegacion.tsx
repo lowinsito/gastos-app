@@ -15,13 +15,18 @@ export async function Navegacion() {
   // Sin sesion no hay nada que navegar: estas en el login.
   if (!sesion) return null;
 
+  // La barra queda apenas translucida, con desenfoque por detras, para que
+  // la foto de fondo se asome arriba de todo sin que los enlaces pierdan
+  // legibilidad. Las tarjetas de abajo siguen solidas.
   return (
-    <nav className="border-b border-borde bg-superficie">
-      <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 sm:px-6 lg:px-8">
+    <nav className="border-b border-borde bg-superficie-translucida backdrop-blur-md">
+      <div className="mx-auto flex max-w-5xl items-center gap-1 px-3 sm:gap-2 sm:px-6 lg:px-8">
         <Logo />
         <EnlacesNavegacion />
 
-        <div className="ml-auto flex items-center gap-2">
+        {/* shrink-0 para que este grupo nunca se comprima: si falta lugar,
+            lo que cede es la fila de enlaces, que sabe desplazarse. */}
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
           <SelectorTema />
           <span className="hidden text-sm text-texto-suave sm:inline">
             {NOMBRES[sesion.persona]}
