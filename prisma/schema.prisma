@@ -33,6 +33,28 @@ model Usuario {
   actualizadoEn DateTime @updatedAt
 }
 
+/// Un item de la lista del super.
+///
+/// Es una tabla aparte de `Gasto` a proposito: un item no tiene monto ni
+/// fecha ni categoria, y un gasto no tiene "comprado si/no". Mezclarlos
+/// obligaria a dejar la mitad de las columnas vacias en cada fila.
+model ItemLista {
+  id     String @id @default(cuid())
+  nombre String
+
+  /// El tildecito. Los comprados NO se borran solos: quedan tachados al
+  /// final de la lista hasta que alguien aprieta "Vaciar comprados".
+  comprado Boolean @default(false)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  // La lista siempre se pide igual: primero lo que falta comprar y, dentro
+  // de cada grupo, por orden de carga. El indice esta armado con esas dos
+  // columnas en ese orden para que la base no tenga que ordenar a mano.
+  @@index([comprado, creadoEn])
+}
+
 /// Categorias posibles de un gasto.
 enum Categoria {
   SUPERMERCADO

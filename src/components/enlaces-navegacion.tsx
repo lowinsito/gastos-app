@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const SECCIONES = [
   { href: "/resumen", texto: "Resumen" },
   { href: "/", texto: "Gastos" },
+  { href: "/lista", texto: "Súper" },
 ];
 
 /**
