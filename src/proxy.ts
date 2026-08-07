@@ -37,7 +37,11 @@ export const config = {
   // estilos. Ademas, el manifiesto tiene que poder leerse para que el
   // celular sepa como instalar la app, y ahi devolver el HTML del login
   // rompia la instalacion.
+  //
+  // La imagen de fondo tambien va excluida: se usa en la pantalla de
+  // login, donde todavia no hay sesion. Sin esta linea, el pedido de la
+  // imagen terminaba redirigido al login y el fondo no aparecia nunca.
   matcher: [
-    "/((?!_next/static|_next/image|icon.svg|favicon.ico|manifest.webmanifest).*)",
+    "/((?!_next/static|_next/image|icon.svg|favicon.ico|manifest.webmanifest|fondo\\.(?:svg|jpg|jpeg|png|webp)).*)",
   ],
 };

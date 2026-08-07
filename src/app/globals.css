@@ -11,6 +11,12 @@
 */
 
 :root {
+  /* LA FOTO DE FONDO.
+     Esta es la unica linea que hay que tocar para cambiarla: se pone el
+     archivo en la carpeta `public/` y se escribe su nombre aca.
+     Con `none` la app queda como estaba, sin fondo. */
+  --imagen-fondo: url("/fondo.svg");
+
   --fondo: #faf7f2;
   --superficie: #ffffff;
   --borde: #ebe4da;
@@ -18,6 +24,17 @@
   --texto-suave: #7d7168;
   --acento: #c2632f;
   --acento-suave: #f6ece3;
+
+  /* El velo que va ENTRE la foto de fondo y el contenido.
+     Es del mismo color que --fondo pero semitransparente: arriba deja ver
+     mas la foto, y hacia abajo se cierra para que el texto de las tarjetas
+     nunca compita con la imagen. */
+  --velo-arriba: rgb(250 247 242 / 0.62);
+  --velo-abajo: rgb(250 247 242 / 0.94);
+
+  /* La barra de navegacion, apenas translucida para que la foto se
+     asome por detras. */
+  --superficie-translucida: rgb(255 255 255 / 0.72);
 }
 
 /* Modo oscuro del sistema, salvo que la persona haya pedido claro. */
@@ -30,6 +47,12 @@
     --texto-suave: #a2958a;
     --acento: #e08a4e;
     --acento-suave: #2a2018;
+
+    /* En oscuro el velo tiene que tapar MAS: una foto normal esta llena de
+       zonas claras, y sobre claro el texto blanco desaparece. */
+    --velo-arriba: rgb(22 19 15 / 0.7);
+    --velo-abajo: rgb(22 19 15 / 0.96);
+    --superficie-translucida: rgb(30 26 22 / 0.72);
   }
 }
 
@@ -43,6 +66,10 @@
   --texto-suave: #a2958a;
   --acento: #e08a4e;
   --acento-suave: #2a2018;
+
+  --velo-arriba: rgb(22 19 15 / 0.7);
+  --velo-abajo: rgb(22 19 15 / 0.96);
+  --superficie-translucida: rgb(30 26 22 / 0.72);
 }
 
 /* @theme le enseña estos colores a Tailwind, para poder escribir clases
@@ -50,6 +77,7 @@
 @theme inline {
   --color-fondo: var(--fondo);
   --color-superficie: var(--superficie);
+  --color-superficie-translucida: var(--superficie-translucida);
   --color-borde: var(--borde);
   --color-texto: var(--texto);
   --color-texto-suave: var(--texto-suave);
@@ -59,10 +87,50 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* El color de fondo vive en <html> y no en <body> a proposito.
+   Si lo dejaramos en el body, el navegador lo "sube" al lienzo de la
+   pagina y taparia la capa de la foto, que va justo detras del contenido.
+   Poniendolo aca, el body queda transparente y la foto se ve. */
+html {
+  background-color: var(--fondo);
+}
+
 body {
-  background: var(--fondo);
+  background: transparent;
   color: var(--texto);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* --- La foto de fondo -------------------------------------------------
+
+   Es una capa aparte y no el background del body por dos razones:
+
+   1. `position: fixed` hace que la foto se quede quieta mientras el
+      contenido se desplaza. Si se moviera con el scroll, en una lista
+      larga de gastos la imagen se iria a cualquier lado.
+   2. `background-attachment: fixed` haria lo mismo en una sola linea,
+      pero Safari en iPhone no lo soporta bien y queda temblando.
+
+   La foto se activa sola cuando existe el archivo: si `--imagen-fondo`
+   no esta definida, la capa queda en `none` y la app se ve exactamente
+   como antes. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  /* pointer-events: none para que la capa no se coma los clics de nada
+     que quede debajo. */
+  pointer-events: none;
+
+  /* Las capas de `background` se apilan de arriba hacia abajo: primero
+     el velo, y la foto debajo. */
+  background-image:
+    linear-gradient(to bottom, var(--velo-arriba), var(--velo-abajo) 65%),
+    var(--imagen-fondo, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Que los controles nativos (calendarios, flechitas de los select)

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
+  <!-- Fondo provisorio, para reemplazar por la foto de Jose y Camila.
+       Manchas calidas en los tonos terracota de la app. -->
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#e8a072" />
+      <stop offset="0.5" stop-color="#c2632f" />
+      <stop offset="1" stop-color="#6d3418" />
+    </linearGradient>
+    <radialGradient id="brillo" cx="0.25" cy="0.15" r="0.75">
+      <stop offset="0" stop-color="#ffd9b0" stop-opacity="0.85" />
+      <stop offset="1" stop-color="#ffd9b0" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="sombra" cx="0.85" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#3a1a08" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#3a1a08" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#base)" />
+  <rect width="1200" height="1600" fill="url(#brillo)" />
+  <rect width="1200" height="1600" fill="url(#sombra)" />
+
+  <g fill="#ffffff" opacity="0.09">
+    <ellipse cx="240" cy="380" rx="420" ry="300" />
+    <ellipse cx="980" cy="1180" rx="380" ry="260" />
+  </g>
+  <g fill="#4a2110" opacity="0.12">
+    <ellipse cx="1020" cy="300" rx="300" ry="380" />
+    <ellipse cx="180" cy="1340" rx="340" ry="240" />
+  </g>
+</svg>

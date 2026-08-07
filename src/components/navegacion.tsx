@@ -15,8 +15,11 @@ export async function Navegacion() {
   // Sin sesion no hay nada que navegar: estas en el login.
   if (!sesion) return null;
 
+  // La barra queda apenas translucida, con desenfoque por detras, para que
+  // la foto de fondo se asome arriba de todo sin que los enlaces pierdan
+  // legibilidad. Las tarjetas de abajo siguen solidas.
   return (
-    <nav className="border-b border-borde bg-superficie">
+    <nav className="border-b border-borde bg-superficie-translucida backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 sm:px-6 lg:px-8">
         <Logo />
         <EnlacesNavegacion />
