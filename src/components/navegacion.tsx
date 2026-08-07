@@ -20,11 +20,13 @@ export async function Navegacion() {
   // legibilidad. Las tarjetas de abajo siguen solidas.
   return (
     <nav className="border-b border-borde bg-superficie-translucida backdrop-blur-md">
-      <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-5xl items-center gap-1 px-3 sm:gap-2 sm:px-6 lg:px-8">
         <Logo />
         <EnlacesNavegacion />
 
-        <div className="ml-auto flex items-center gap-2">
+        {/* shrink-0 para que este grupo nunca se comprima: si falta lugar,
+            lo que cede es la fila de enlaces, que sabe desplazarse. */}
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
           <SelectorTema />
           <span className="hidden text-sm text-texto-suave sm:inline">
             {NOMBRES[sesion.persona]}

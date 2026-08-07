@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useState } from "react";
 
-export const CLAVE_TEMA = "tema";
+import { CLAVE_TEMA } from "@/lib/tema";
 
 const OPCIONES = [
   { valor: "claro", etiqueta: "Claro", icono: "☀" },

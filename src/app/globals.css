@@ -15,7 +15,7 @@
      Esta es la unica linea que hay que tocar para cambiarla: se pone el
      archivo en la carpeta `public/` y se escribe su nombre aca.
      Con `none` la app queda como estaba, sin fondo. */
-  --imagen-fondo: url("/fondo.svg");
+  --imagen-fondo: url("/fondo.jpg");
 
   --fondo: #faf7f2;
   --superficie: #ffffff;
@@ -140,4 +140,39 @@ body::before {
 }
 :root[data-theme="claro"] {
   color-scheme: light;
+}
+
+/* --- La pantalla de entrar -------------------------------------------
+
+   El login es la unica pantalla casi vacia: un cuadradito en el medio y
+   nada mas. Ahi la foto puede lucirse, asi que lleva otra imagen y otro
+   velo.
+
+   `:has()` es lo que hace posible esto: le pregunta al <html> "¿tenes
+   adentro algo marcado como login?". Sin `:has()` habria que pasar el
+   dato por JavaScript hasta el <body>, porque en CSS un elemento nunca
+   podia mirar a sus hijos. Es de lo mas util que se le sumo al lenguaje.
+
+   OJO con el orden del velo: aca esta INVERTIDO respecto del resto de la
+   app. Tapa mas arriba, que es donde van el titulo y el formulario, y se
+   abre abajo, que es donde estan las caras. */
+:root:has([data-pagina="login"]) {
+  --imagen-fondo: url("/fondo-login.jpg");
+  /* Arriba tapamos casi del todo: ahi va el subtitulo en gris claro y
+     necesita contraste. No perdemos nada, porque en esa foto arriba solo
+     hay cielo. Abajo, donde estan las caras, el velo se abre. */
+  --velo-arriba: rgb(250 247 242 / 0.92);
+  --velo-abajo: rgb(250 247 242 / 0.38);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="claro"]):has([data-pagina="login"]) {
+    --velo-arriba: rgb(22 19 15 / 0.93);
+    --velo-abajo: rgb(22 19 15 / 0.45);
+  }
+}
+
+:root[data-theme="oscuro"]:has([data-pagina="login"]) {
+  --velo-arriba: rgb(22 19 15 / 0.86);
+  --velo-abajo: rgb(22 19 15 / 0.45);
 }
